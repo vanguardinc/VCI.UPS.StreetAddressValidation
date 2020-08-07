@@ -1,7 +1,8 @@
-﻿using citizenkraft.UpsStreetAddressValidation.Entities;
+using citizenkraft.UpsStreetAddressValidation.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,10 @@ namespace TestConsole
 	{
 		static void Main(string[] args)
 		{
+			// Force TLS 1.2 (now required by UPS)
+			ServicePointManager.Expect100Continue = true;
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
 			var validator = new citizenkraft.UpsStreetAddressValidation.UpsStreetAddressValidator("username", "password", "license key", false);
 			//get the response
 			//multiple address candidates
