@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using citizenkraft.UpsStreetAddressValidation.Extensions;
 using Newtonsoft.Json;
 
 namespace citizenkraft.UpsStreetAddressValidation.Entities
@@ -10,6 +11,7 @@ namespace citizenkraft.UpsStreetAddressValidation.Entities
 
 	public class Address : IComparable
 	{
+		[JsonConverter(typeof(SingleValueStringArrayConverter))]
 		[JsonProperty("AddressLine")]
 		public string Street { get; set; }
 		[JsonProperty("PoliticalDivision2")]
