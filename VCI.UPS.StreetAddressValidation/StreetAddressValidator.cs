@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -52,10 +53,13 @@ namespace VCI.UPS.StreetAddressValidation
                     new KeyValuePair<string, string>("grant_type", "client_credentials")
                 })
             };
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", clientCredentials);
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", clientCredentials);
+
             try
             {
                 var response = await HttpClient.SendAsync(request);
+
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonContent = await response.Content.ReadAsStringAsync();
@@ -70,9 +74,8 @@ namespace VCI.UPS.StreetAddressValidation
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                throw;
             }
-            return null;
         }
 
         private async Task<AddressValidationResponse> ValidateAddressAsync(Address address)
