@@ -1,5 +1,4 @@
-﻿using citizenkraft.UpsStreetAddressValidation.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -8,10 +7,11 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using VCI.UPS.StreetAddressValidation.Entities;
 
-namespace citizenkraft.UpsStreetAddressValidation
+namespace VCI.UPS.StreetAddressValidation
 {
-    internal class UpsOAuthStreetAddressValidator
+    public class UpsStreetAddressValidator
     {
         private readonly string _clientId;
         private readonly string _clientSecret;
@@ -19,7 +19,7 @@ namespace citizenkraft.UpsStreetAddressValidation
         private readonly string _addressValidationEndpoint;
         private HttpClient _httpClient;
 
-        public UpsOAuthStreetAddressValidator(string clientId, string clientSecret)
+        public UpsStreetAddressValidator(string clientId, string clientSecret)
         {
             _clientId = clientId;
             _clientSecret = clientSecret;
@@ -45,8 +45,9 @@ namespace citizenkraft.UpsStreetAddressValidation
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonContent = await response.Content.ReadAsStringAsync();
-                    var tokenData = JsonConvert.DeserializeObject<dynamic>(jsonContent);
-                    return tokenData.access_token;
+                    var tokenData = JsonConvert.DeserializeObject<OAuthTokenResponse>(jsonContent);
+
+                    return tokenData.AccessToken;
                 }
                 else
                 {
