@@ -12,7 +12,7 @@ using VCI.UPS.StreetAddressValidation.Entities;
 
 namespace VCI.UPS.StreetAddressValidation
 {
-    public class UpsStreetAddressValidator
+    public class StreetAddressValidator
     {
         private readonly string ClientId;
         private readonly string ClientSecret;
@@ -22,7 +22,7 @@ namespace VCI.UPS.StreetAddressValidation
         private const string TokenEndpoint = "https://onlinetools.ups.com/security/v1/oauth/token";
         private const string AddressValidationEndpoint = "https://onlinetools.ups.com/api/addressvalidation//v1/1?regionalrequestindicator=string&maximumcandidatelistsize=1";
 
-        public UpsStreetAddressValidator(string connectionString)
+        public StreetAddressValidator(string connectionString)
         {
             DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
 
@@ -34,7 +34,7 @@ namespace VCI.UPS.StreetAddressValidation
             HttpClient = new HttpClient();
         }
 
-        public UpsStreetAddressValidator(string clientId, string clientSecret)
+        public StreetAddressValidator(string clientId, string clientSecret)
         {
             ClientId = clientId;
             ClientSecret = clientSecret;
