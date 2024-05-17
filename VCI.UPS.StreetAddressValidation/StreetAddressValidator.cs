@@ -86,30 +86,32 @@ namespace VCI.UPS.StreetAddressValidation
 
             var postData = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
-            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await HttpClient.PostAsync(AddressValidationEndpoint, postData);
+
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
+
                 return JsonConvert.DeserializeObject<AddressValidationResponse>(result);
             }
             else
             {
-                Console.WriteLine(response.ToString());
-                throw new Exception("Failed to validate address.");
-
+                throw new Exception("Failed to validate address: " + response.ReasonPhrase);
             }
         }
 
         public async Task<AddressValidationResult> ValidateAddressAsync(string street, string city, string state, string postalCode, string countryCode)
         {
-            if (string.Equals(countryCode, "US", StringComparison.OrdinalIgnoreCase) || string.Equals(countryCode, "PR", StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(countryCode, "US", StringComparison.OrdinalIgnoreCase) || String.Equals(countryCode, "PR", StringComparison.OrdinalIgnoreCase))
             {
                 try
                 {
                     var addressToValidate = new Address(street, city, state, postalCode, countryCode);
+
                     var response = await ValidateAddressAsync(addressToValidate);
+
                     return new AddressValidationResult(response, addressToValidate);
                 }
                 catch (Exception ex)
