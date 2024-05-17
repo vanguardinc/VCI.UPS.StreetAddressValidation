@@ -82,34 +82,23 @@ namespace VCI.UPS.StreetAddressValidation
         {
             string accessToken = await GetAccessTokenAsync();
 
-            JObject json = JObject.Parse($@"{{
-                ""XAVRequest"": {{
-                    ""AddressKeyFormat"": {{
-                        ""AddressLine"": [
-                            ""{address.Street}""
-                        ],
-                        ""PoliticalDivision2"": ""{address.City}"",
-                        ""PoliticalDivision1"": ""{address.State}"",
-                        ""PostcodePrimaryLow"": ""{address.Postcode}"",
-                        ""CountryCode"": ""{address.CountryCode}""
-                    }}
-                }}
-            }}");
+            var request = new XAVRequest(address);
 
-            var postData = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            var postData = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await HttpClient.PostAsync(AddressValidationEndpoint, postData);
+
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
+
                 return JsonConvert.DeserializeObject<AddressValidationResponse>(result);
             }
             else
             {
-                Console.WriteLine(response.ToString());
-                throw new Exception("Failed to validate address.");
-
+                throw new Exception("Failed to validate address");
             }
         }
 

@@ -11,6 +11,7 @@ namespace VCI.UPS.StreetAddressValidation.Entities
         public object Request { get; set; }
         public string MaximumListSize { get; set; }
         public Address AddressKeyFormat { get; set; }
+
         public XAVRequest(Address address)
         {
             Request = new
