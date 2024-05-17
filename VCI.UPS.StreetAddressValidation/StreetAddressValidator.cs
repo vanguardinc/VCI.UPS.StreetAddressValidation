@@ -109,7 +109,8 @@ namespace VCI.UPS.StreetAddressValidation
 
             }
         }
-        public async Task<AddressValidationResult> ValidateAddress(string street, string city, string state, string postalCode, string countryCode)
+
+        public async Task<AddressValidationResult> ValidateAddressAsync(string street, string city, string state, string postalCode, string countryCode)
         {
             if (string.Equals(countryCode, "US", StringComparison.OrdinalIgnoreCase) || string.Equals(countryCode, "PR", StringComparison.OrdinalIgnoreCase))
             {
