@@ -13,25 +13,26 @@ namespace VCI.UPS.StreetAddressValidation
 {
     public class UpsStreetAddressValidator
     {
-        private readonly string _clientId;
-        private readonly string _clientSecret;
-        private readonly string _tokenEndpoint;
-        private readonly string _addressValidationEndpoint;
-        private HttpClient _httpClient;
+        private readonly string ClientId;
+        private readonly string ClientSecret;
+        
+        private HttpClient HttpClient;
+
+        private const string TokenEndpoint = "https://onlinetools.ups.com/security/v1/oauth/token";
+        private const string AddressValidationEndpoint = "https://onlinetools.ups.com/api/addressvalidation//v1/1?regionalrequestindicator=string&maximumcandidatelistsize=1";
 
         public UpsStreetAddressValidator(string clientId, string clientSecret)
         {
-            _clientId = clientId;
-            _clientSecret = clientSecret;
-            _tokenEndpoint = "https://onlinetools.ups.com/security/v1/oauth/token";
-            _addressValidationEndpoint = "https://onlinetools.ups.com/api/addressvalidation//v1/1?regionalrequestindicator=string&maximumcandidatelistsize=1";
-            _httpClient = new HttpClient();
+            ClientId = clientId;
+            ClientSecret = clientSecret;
+
+            HttpClient = new HttpClient();
         }
 
         public async Task<string> GetAccessTokenAsync()
         {
-            var clientCredentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_clientId}:{_clientSecret}"));
-            var request = new HttpRequestMessage(HttpMethod.Post, _tokenEndpoint)
+            var clientCredentials = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}"));
+            var request = new HttpRequestMessage(HttpMethod.Post, TokenEndpoint)
             {
                 Content = new FormUrlEncodedContent(new[]
                 {
@@ -41,7 +42,7 @@ namespace VCI.UPS.StreetAddressValidation
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", clientCredentials);
             try
             {
-                var response = await _httpClient.SendAsync(request);
+                var response = await HttpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonContent = await response.Content.ReadAsStringAsync();
@@ -80,9 +81,9 @@ namespace VCI.UPS.StreetAddressValidation
             }}");
 
             var postData = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
-            var response = await _httpClient.PostAsync(_addressValidationEndpoint, postData);
+            var response = await HttpClient.PostAsync(AddressValidationEndpoint, postData);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
