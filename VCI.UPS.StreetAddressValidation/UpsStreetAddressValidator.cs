@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -20,6 +21,18 @@ namespace VCI.UPS.StreetAddressValidation
 
         private const string TokenEndpoint = "https://onlinetools.ups.com/security/v1/oauth/token";
         private const string AddressValidationEndpoint = "https://onlinetools.ups.com/api/addressvalidation//v1/1?regionalrequestindicator=string&maximumcandidatelistsize=1";
+
+        public UpsStreetAddressValidator(string connectionString)
+        {
+            DbConnectionStringBuilder dbConnectionStringBuilder = new DbConnectionStringBuilder();
+
+            dbConnectionStringBuilder.ConnectionString = connectionString;
+
+            ClientId = (string)dbConnectionStringBuilder["ClientId"];
+            ClientSecret = (string)dbConnectionStringBuilder["ClientSecret"];
+
+            HttpClient = new HttpClient();
+        }
 
         public UpsStreetAddressValidator(string clientId, string clientSecret)
         {
