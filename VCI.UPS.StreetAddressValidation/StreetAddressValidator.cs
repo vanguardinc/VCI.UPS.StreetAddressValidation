@@ -82,23 +82,23 @@ namespace VCI.UPS.StreetAddressValidation
         {
             string accessToken = await GetAccessTokenAsync();
 
-            var request = new XAVRequest(address);
+            var request = new AddressValidationRequest(address);
 
             var postData = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await HttpClient.PostAsync(AddressValidationEndpoint, postData);
-
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
-
                 return JsonConvert.DeserializeObject<AddressValidationResponse>(result);
             }
             else
             {
-                throw new Exception("Failed to validate address");
+                Console.WriteLine(response.ToString());
+                throw new Exception("Failed to validate address.");
+
             }
         }
 
