@@ -2,7 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>A simple library to validate street level addresses using the UPS API</Description>
+    <Company>Vanguard Computers, Inc.</Company>
+    <Copyright>Copyright © Vanguard Computers, Inc. 2024</Copyright>
+    <PackageProjectUrl>https://github.com/vanguardinc/VCI.UPS.StreetAddressValidation</PackageProjectUrl>
+    <PackageIcon>Logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/vanguardinc/VCI.UPS.StreetAddressValidation</RepositoryUrl>
+    <PackageTags>ups, address validation</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
